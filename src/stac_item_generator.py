@@ -27,6 +27,10 @@ def handle_duplicate_ids(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
             seen[item_id] += 1
             item = dict(item)
             item["id"] = f"{item_id}-{seen[item_id]}"
+            # Update self-link href to match renamed id
+            for link in item.get("links", []):
+                if link.get("rel") == "self":
+                    link["href"] = f"items/{item['id']}.json"
         else:
             seen[item_id] = 0
         result.append(item)
@@ -36,7 +40,9 @@ def handle_duplicate_ids(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def feature_to_item(feature: dict[str, Any], crs: str) -> dict[str, Any]:
     props = feature.get("properties", {})
     item_id = generate_item_id(feature)
-    geom = feature.get("geometry", {})
+    geom = feature.get("geometry")
+    if not geom:
+        geom = {"type": "Point", "coordinates": []}
     geom_type = geom.get("type", "Unknown")
     transformed_geom = transform_geometry(geom, crs)
     bbox = calculate_bbox(transformed_geom["coordinates"])

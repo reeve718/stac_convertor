@@ -12,5 +12,6 @@ dependencies = [
     "pyproj>=3.6.0",
 ]
 
-[project.scripts]
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0"]
 geojson2stac = "src.cli:app"
