@@ -62,6 +62,11 @@ def generate_collection(collection_id: str, items: list[dict[str, Any]]) -> dict
                 "href": "items/",
                 "type": "application/geo+json",
             },
+            {
+                "rel": "parent",
+                "href": "../",
+                "type": "application/json",
+            },
         ],
     }
 
