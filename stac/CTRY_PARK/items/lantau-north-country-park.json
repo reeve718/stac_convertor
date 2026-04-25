@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "lantau-north-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      113.90872288016622,
+      22.266268433656077
+    ]
+  },
+  "bbox": [
+    113.90872288016622,
+    22.266268433656077,
+    113.90872288016622,
+    22.266268433656077
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.552827+00:00",
+    "OBJECTID": 15,
+    "NAME_EN": "Lantau North Country Park",
+    "NAME_TC": "北大嶼郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/lantau-north-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

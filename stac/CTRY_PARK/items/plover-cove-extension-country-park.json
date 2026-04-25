@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "plover-cove-extension-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.31150871389512,
+      22.513869499045384
+    ]
+  },
+  "bbox": [
+    114.31150871389512,
+    22.513869499045384,
+    114.31150871389512,
+    22.513869499045384
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.536553+00:00",
+    "OBJECTID": 9,
+    "NAME_EN": "Plover Cove (Extension) Country Park",
+    "NAME_TC": "船灣郊野公園(擴建部分)",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/plover-cove-extension-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

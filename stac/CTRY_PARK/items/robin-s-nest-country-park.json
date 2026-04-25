@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "robin-s-nest-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.19954613346384,
+      22.543633190458458
+    ]
+  },
+  "bbox": [
+    114.19954613346384,
+    22.543633190458458,
+    114.19954613346384,
+    22.543633190458458
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.582431+00:00",
+    "OBJECTID": 25,
+    "NAME_EN": "Robin's Nest Country Park",
+    "NAME_TC": "紅花嶺郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/robin-s-nest-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

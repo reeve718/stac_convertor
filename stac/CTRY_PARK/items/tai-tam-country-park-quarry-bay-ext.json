@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "tai-tam-country-park-quarry-bay-ext",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.21648125414437,
+      22.273799657372567
+    ]
+  },
+  "bbox": [
+    114.21648125414437,
+    22.273799657372567,
+    114.21648125414437,
+    22.273799657372567
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.575860+00:00",
+    "OBJECTID": 23,
+    "NAME_EN": "Tai Tam Country Park (Quarry Bay Ext.)",
+    "NAME_TC": "大潭郊野公園(鰂魚涌擴建部分)",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/tai-tam-country-park-quarry-bay-ext.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

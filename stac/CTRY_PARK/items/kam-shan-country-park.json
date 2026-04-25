@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "kam-shan-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.15019419258,
+      22.362392452630665
+    ]
+  },
+  "bbox": [
+    114.15019419258,
+    22.362392452630665,
+    114.15019419258,
+    22.362392452630665
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.561653+00:00",
+    "OBJECTID": 18,
+    "NAME_EN": "Kam Shan Country Park",
+    "NAME_TC": "金山郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/kam-shan-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

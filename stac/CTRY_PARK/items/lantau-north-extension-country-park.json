@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "lantau-north-extension-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      113.96079437418298,
+      22.285490889910854
+    ]
+  },
+  "bbox": [
+    113.96079437418298,
+    22.285490889910854,
+    113.96079437418298,
+    22.285490889910854
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.579693+00:00",
+    "OBJECTID": 24,
+    "NAME_EN": "Lantau North (Extension) Country Park",
+    "NAME_TC": "北大嶼郊野公園(擴建部分)",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/lantau-north-extension-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}
