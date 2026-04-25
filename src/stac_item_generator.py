@@ -5,7 +5,7 @@ from typing import Any
 from src.crs_transformer import transform_geometry, calculate_bbox
 
 
-def generate_item_id(feature: dict[str, Any], crs: str) -> str:
+def generate_item_id(feature: dict[str, Any]) -> str:
     props = feature.get("properties", {})
     name = props.get("NAME_EN")
     if name:
@@ -33,13 +33,13 @@ def handle_duplicate_ids(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
-def feature_to_item(feature: dict[str, Any], crs: str, collection_id: str) -> dict[str, Any]:
+def feature_to_item(feature: dict[str, Any], crs: str) -> dict[str, Any]:
     props = feature.get("properties", {})
-    item_id = generate_item_id(feature, crs)
+    item_id = generate_item_id(feature)
     geom = feature.get("geometry", {})
     geom_type = geom.get("type", "Unknown")
     transformed_geom = transform_geometry(geom, crs)
-    bbox = calculate_bbox(geom.get("coordinates"))
+    bbox = calculate_bbox(transformed_geom["coordinates"])
 
     item_props = {
         "datetime": datetime.now(timezone.utc).isoformat(),

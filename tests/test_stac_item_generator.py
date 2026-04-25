@@ -9,17 +9,17 @@ from src.stac_item_generator import (
 class TestGenerateItemID:
     def test_id_from_name_en(self):
         feature = {"properties": {"NAME_EN": "Clear Water Bay Country Park"}}
-        item_id = generate_item_id(feature, "EPSG:2326")
+        item_id = generate_item_id(feature)
         assert item_id == "clear-water-bay-country-park"
 
     def test_id_fallback_to_objectid(self):
         feature = {"properties": {"OBJECTID": 42}}
-        item_id = generate_item_id(feature, "EPSG:2326")
+        item_id = generate_item_id(feature)
         assert item_id == "item-42"
 
     def test_id_name_en_snake_to_kebab(self):
         feature = {"properties": {"NAME_EN": "Sai_Kung_East Country_Park"}}
-        item_id = generate_item_id(feature, "EPSG:2326")
+        item_id = generate_item_id(feature)
         assert item_id == "sai-kung-east-country-park"
 
 
@@ -50,7 +50,7 @@ class TestFeatureToItem:
             "geometry": {"type": "Point", "coordinates": [848550, 817395]},
             "properties": {"OBJECTID": 1, "NAME_EN": "Clear Water Bay Country Park", "NAME_TC": "清水灣郊野公園"},
         }
-        item = feature_to_item(feature, "EPSG:2326", "ctry-park")
+        item = feature_to_item(feature, "EPSG:2326")
         assert item["id"] == "clear-water-bay-country-park"
         assert item["type"] == "Feature"
         assert item["properties"]["geometry_type"] == "Point"
