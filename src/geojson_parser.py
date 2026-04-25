@@ -20,7 +20,7 @@ def parse_geojson(path: Path) -> dict[str, Any]:
         print(f"Error: File not found: {path}", file=sys.stderr)
         sys.exit(1)
     try:
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
     except json.JSONDecodeError as e:
         print(f"Error: Invalid JSON: {e}", file=sys.stderr)
