@@ -9,8 +9,6 @@ schema: spec-driven
 #     We use conventional commits
 #     Domain: e-commerce platform
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-  rules:
+rules:
     tasks:
       - "For any change touching src/cli.py or adding CLI arguments, README.md MUST be updated in the tasks list"
