@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "ma-on-shan-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.2461274937909,
+      22.38044087937498
+    ]
+  },
+  "bbox": [
+    114.2461274937909,
+    22.38044087937498,
+    114.2461274937909,
+    22.38044087937498
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.520646+00:00",
+    "OBJECTID": 4,
+    "NAME_EN": "Ma On Shan Country Park",
+    "NAME_TC": "馬鞍山郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/ma-on-shan-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

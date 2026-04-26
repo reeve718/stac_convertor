@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "sai-kung-east-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.35393554772992,
+      22.400225858883044
+    ]
+  },
+  "bbox": [
+    114.35393554772992,
+    22.400225858883044,
+    114.35393554772992,
+    22.400225858883044
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.555409+00:00",
+    "OBJECTID": 16,
+    "NAME_EN": "Sai Kung East Country Park",
+    "NAME_TC": "西貢東郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/sai-kung-east-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

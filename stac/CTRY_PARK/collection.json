@@ -1,0 +1,79 @@
+{
+  "type": "Collection",
+  "stac_version": "1.0.0",
+  "id": "ctry-park",
+  "title": "Ctry Park",
+  "description": "STAC Collection generated from GeoJSON file: CTRY_PARK",
+  "keywords": [],
+  "providers": [],
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          113.90872288016622,
+          22.237759013062657,
+          114.35393554772992,
+          22.543633190458458
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2026-04-25T19:34:57.609579+00:00",
+          "2026-04-25T19:34:57.609579+00:00"
+        ]
+      ]
+    }
+  },
+  "license": "proprietary",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          113.90872288016622,
+          22.237759013062657
+        ],
+        [
+          114.35393554772992,
+          22.237759013062657
+        ],
+        [
+          114.35393554772992,
+          22.543633190458458
+        ],
+        [
+          113.90872288016622,
+          22.543633190458458
+        ],
+        [
+          113.90872288016622,
+          22.237759013062657
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    113.90872288016622,
+    22.237759013062657,
+    114.35393554772992,
+    22.543633190458458
+  ],
+  "properties": {
+    "created": "2026-04-25T19:34:57.609579+00:00",
+    "modified": "2026-04-25T19:34:57.609579+00:00"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "items",
+      "href": "items/",
+      "type": "application/geo+json"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "lung-fu-shan-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.13478251799567,
+      22.277140393448224
+    ]
+  },
+  "bbox": [
+    114.13478251799567,
+    22.277140393448224,
+    114.13478251799567,
+    22.277140393448224
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.534051+00:00",
+    "OBJECTID": 8,
+    "NAME_EN": "Lung Fu Shan Country Park",
+    "NAME_TC": "龍虎山郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/lung-fu-shan-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

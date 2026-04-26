@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "lantau-south-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      113.93959978734999,
+      22.252138409160978
+    ]
+  },
+  "bbox": [
+    113.93959978734999,
+    22.252138409160978,
+    113.93959978734999,
+    22.252138409160978
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.529994+00:00",
+    "OBJECTID": 7,
+    "NAME_EN": "Lantau South Country Park",
+    "NAME_TC": "南大嶼郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/lantau-south-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}
