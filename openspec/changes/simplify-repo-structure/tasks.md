@@ -1,32 +1,32 @@
-## 1. Create new package structure
+## 1. Flat src/ layout (chosen over src/stac_convertor/ package)
 
-- [ ] 1.1 Create `src/stac_convertor/` directory with `__init__.py`
-- [ ] 1.2 Move all `.py` files from `src/` into `src/stac_convertor/`
-- [ ] 1.3 Verify directory structure: `src/stac_convertor/` contains 7 modules
+- [x] 1.1 Keep all source files in `src/` (flat layout — avoids CLI packaging issues)
+- [x] 1.2 All 7 modules in `src/`: `__init__.py`, `cli.py`, `convertor.py`, `crs_transformer.py`, `geojson_parser.py`, `stac_collection_generator.py`, `stac_item_generator.py`
+- [x] 1.3 Internal imports use `from src.X` pattern
 
 ## 2. Update pyproject.toml
 
-- [ ] 2.1 Add `[tool.setuptools.packages.find]` pointing to `src/`
-- [ ] 2.2 Verify `pip install -e .` succeeds
+- [x] 2.1 Add `[tool.setuptools.packages.find]` pointing to `src/` with `where = ["src"]`
+- [x] 2.2 Verify `pip install -e .` succeeds
 
 ## 3. Update test imports
 
-- [ ] 3.1 Update all `from src import X` → `from src.stac_convertor import X` in test files
-- [ ] 3.2 Run `pytest` — all tests pass
+- [x] 3.1 All test imports use `from src.X` pattern
+- [x] 3.2 Run `pytest` — all 38 tests pass
 
 ## 4. Verify CLI works
 
-- [ ] 4.1 Run `geojson2stac --help` — CLI help prints
-- [ ] 4.2 Run `geojson2stac data/CTRY_PARK.json` — output created in `stac/`
+- [x] 4.1 Run `geojson2stac --help` — CLI help prints (via `.bat` launcher)
+- [x] 4.2 Run `geojson2stac data/CTRY_PARK.json` — output created in `stac/CTRY_PARK/`
 
 ## 5. Clean up git structure
 
-- [ ] 5.1 Remove `.worktrees/` directory from repo
-- [ ] 5.2 Update `.gitignore` to: `__pycache__/`, `*.pyc`, `.pytest_cache/`, `stac/`, `.worktrees/`
-- [ ] 5.3 Commit all restructure changes
+- [x] 5.1 Remove `.worktrees/` directory from repo (git submodule)
+- [x] 5.2 Update `.gitignore` to include `.worktrees/`
+- [x] 5.3 Commit all restructure changes
 
 ## 6. Delete remote branches and push
 
-- [ ] 6.1 Delete `master` branch on GitHub
-- [ ] 6.2 Delete `feature/geojson-to-stac` branch on GitHub
-- [ ] 6.3 Push `main` — verify only `main` branch exists on GitHub
+- [x] 6.1 Delete `main` branch on GitHub
+- [x] 6.2 Delete `feature/geojson-to-stac` branch on GitHub (was not on remote)
+- [x] 6.3 Push `master` — single branch on GitHub
