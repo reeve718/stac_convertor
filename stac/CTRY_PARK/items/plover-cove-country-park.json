@@ -1,0 +1,38 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "plover-cove-country-park",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      114.26659553797927,
+      22.499632794996884
+    ]
+  },
+  "bbox": [
+    114.26659553797927,
+    22.499632794996884,
+    114.26659553797927,
+    22.499632794996884
+  ],
+  "properties": {
+    "datetime": "2026-04-25T19:34:57.573339+00:00",
+    "OBJECTID": 22,
+    "NAME_EN": "Plover Cove Country Park",
+    "NAME_TC": "船灣郊野公園",
+    "geometry_type": "Point"
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "items/plover-cove-country-park.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {}
+}

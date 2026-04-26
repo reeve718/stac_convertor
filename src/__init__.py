@@ -1,0 +1,1 @@
+"""STAC Convertor - GeoJSON to STAC Collection/Item converter."""
