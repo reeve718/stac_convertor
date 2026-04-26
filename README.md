@@ -8,13 +8,7 @@ Convert GeoJSON FeatureCollections to STAC Collections and Items.
 
 ## Installation
 
-**From pip:**
-
-```bash
-pip install stac-convertor
-```
-
-**Development (editable install):**
+**Clone and install (editable):**
 
 ```bash
 git clone https://github.com/reeve718/stac_convertor.git
