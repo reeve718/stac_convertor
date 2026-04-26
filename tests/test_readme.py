@@ -50,3 +50,9 @@ def test_readme_has_crs_explanation():
     content = read_readme()
     assert "CRS" in content or "crs" in content.lower()
     assert "WGS84" in content or "EPSG:4326" in content
+
+
+def test_readme_helper_reads_content():
+    content = read_readme()
+    assert content, "read_readme() must return non-empty content"
+    assert len(content) > 100, "README content should be substantial"
