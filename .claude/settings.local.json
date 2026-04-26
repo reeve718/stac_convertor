@@ -133,7 +133,15 @@
       "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac show 9133115 --stat)",
       "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac cherry-pick 8433c27 0449e6c 9133115)",
       "Bash(python -m pytest tests/test_readme.py -v --tb=short)",
-      "Bash(py -m pytest tests/test_readme.py -v --tb=short)"
+      "Bash(py -m pytest tests/test_readme.py -v --tb=short)",
+      "Bash(py -m pip install -e \".[dev]\")",
+      "Bash(geojson2stac --help)",
+      "Bash(py -m pip uninstall stac-convertor -y)",
+      "Bash(geojson2stac data/CTRY_PARK.json -o /tmp/stac_test)",
+      "Read(//tmp/stac_test/**)",
+      "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac add README.md pyproject.toml)",
+      "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac add requirements.txt)",
+      "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac commit -m \"chore: add requirements.txt for pip install\")"
     ]
   }
 }
