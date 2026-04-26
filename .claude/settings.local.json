@@ -69,7 +69,16 @@
       "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac log main --oneline -5)",
       "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac log master --oneline)",
       "Bash(git -C /c/Github/stac_convertor add .gitignore claude.md data/ openspec/ .claude/)",
-      "Bash(git -C /c/Github/stac_convertor status)"
+      "Bash(git -C /c/Github/stac_convertor status)",
+      "Bash(git -C /c/Github/stac_convertor commit -m ' *)",
+      "Bash(git -C /c/Github/stac_convertor push origin master)",
+      "Bash(git -C /c/Github/stac_convertor log --oneline -3)",
+      "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac log --oneline -3)",
+      "Bash(git -C /c/Github/stac_convertor status --short)",
+      "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac status --short)",
+      "Bash(git -C /c/Github/stac_convertor diff --stat)",
+      "Bash(git -C /c/Github/stac_convertor add .claude/settings.local.json)",
+      "Bash(git -C /c/Github/stac_convertor commit -m \"chore: fix line endings in .claude/settings.local.json\")"
     ]
   }
 }
