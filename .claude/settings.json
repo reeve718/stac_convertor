@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/reeve/.claude/plugins/cache/superpowers-marketplace/superpowers/5.0.7/skills/subagent-driven-development/**)",
+      "Bash(python -m pytest tests/ -v)",
+      "Read(//c/Users/reeve/.claude/plugins/cache/superpowers-marketplace/superpowers/5.0.7/skills/requesting-code-review/**)",
+      "Bash(grep -E '\\\\.py$|\\\\.toml$|\\\\.md$')",
+      "Bash(pytest -v)",
+      "Bash(python -c \"import sys; print\\('\\\\n'.join\\(sys.path\\)\\)\")",
+      "Bash(git push *)"
+    ]
+  }
+}
