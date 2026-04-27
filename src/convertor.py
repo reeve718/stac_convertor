@@ -1,9 +1,9 @@
 """Main conversion logic - orchestrate all modules."""
 from pathlib import Path
 from typing import Any
-from src.geojson_parser import parse_geojson, extract_features, detect_crs
-from src.stac_item_generator import feature_to_item, handle_duplicate_ids, write_item
-from src.stac_collection_generator import generate_collection, write_collection
+from geojson_parser import parse_geojson, extract_features, detect_crs
+from stac_item_generator import feature_to_item, handle_duplicate_ids, write_item
+from stac_collection_generator import generate_collection, write_collection
 
 
 def convert_file(input_path: Path, output_dir: Path) -> None:

@@ -2,7 +2,7 @@
 import sys
 import typer
 from pathlib import Path
-from src.convertor import convert_file
+from convertor import convert_file
 
 
 app = typer.Typer(help="Convert GeoJSON FeatureCollections to STAC Collections and Items")

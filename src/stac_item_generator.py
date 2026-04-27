@@ -2,7 +2,7 @@
 import re
 from datetime import datetime, timezone
 from typing import Any
-from src.crs_transformer import transform_geometry, calculate_bbox
+from crs_transformer import transform_geometry, calculate_bbox
 
 
 def generate_item_id(feature: dict[str, Any]) -> str:
