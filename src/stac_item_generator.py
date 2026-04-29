@@ -99,3 +99,17 @@ def write_item(item: dict[str, Any], output_path: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(item, f, indent=2, ensure_ascii=False)
+
+
+def write_items_featurecollection(items: list[dict[str, Any]], output_path: str) -> None:
+    """Write all items to a single GeoJSON FeatureCollection file."""
+    import json
+    from pathlib import Path
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    collection = {
+        "type": "FeatureCollection",
+        "features": items,
+    }
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(collection, f, indent=2, ensure_ascii=False)
