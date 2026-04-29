@@ -17,7 +17,7 @@ def test_readme_has_installation_section():
     content = read_readme()
     assert "Installation" in content
     assert "pip install" in content
-    assert "editable" in content.lower()
+    assert "-e" in content
 
 
 def test_readme_has_quick_start():
