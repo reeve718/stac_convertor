@@ -1,8 +1,8 @@
+# stac-convertor
+
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![CI](https://img.shields.io/badge/CI-none-red.svg)](#)
-
-# stac-convertor
+[![CI](https://img.shields.io/badge/CI-none-red.svg)]
 
 Convert GeoJSON FeatureCollections to STAC Collections and Items.
 
@@ -25,7 +25,8 @@ geojson2stac data/CTRY_PARK.json
 ```
 
 Output is written to `stac/CTRY_PARK/`:
-```
+
+```bash
 stac/CTRY_PARK/
 ├── collection.json        ← STAC Collection
 └── items.json            ← STAC Items (GeoJSON FeatureCollection)
@@ -33,12 +34,12 @@ stac/CTRY_PARK/
 
 ## CLI Reference
 
-```
+```bash
 geojson2stac INPUT_FILE [-o OUTPUT_DIR] [-v]
 ```
 
 | Argument / Option | Description | Default |
-|---|---|---|
+| --- | --- | --- |
 | `INPUT_FILE` | Path to GeoJSON file (required) | — |
 | `-o`, `--output` | Output directory | `stac/` |
 | `-v`, `--verbose` | Enable verbose output | `false` |
@@ -61,6 +62,7 @@ geojson2stac data/CTRY_PARK.json -v
 The convertor transforms all geometry coordinates from their source CRS to WGS84 (EPSG:4326) automatically. No configuration needed — the CRS is read from the GeoJSON file's `crs` property.
 
 Supported input CRS includes:
+
 - EPSG:2326 (Hong Kong 1980 Grid System)
 - Any CRS supported by `pyproj`
 
