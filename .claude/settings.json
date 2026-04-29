@@ -7,7 +7,30 @@
       "Bash(grep -E '\\\\.py$|\\\\.toml$|\\\\.md$')",
       "Bash(pytest -v)",
       "Bash(python -c \"import sys; print\\('\\\\n'.join\\(sys.path\\)\\)\")",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(echo \"exit code: $?\")",
+      "Bash(echo \"exit: $?\")",
+      "Bash(pytest tests/test_geojson_parser.py -k \"stream\" -v)",
+      "Bash(pytest tests/test_geojson_parser.py -v)",
+      "Bash(pytest tests/test_stac_item_generator.py::test_inline_duplicate_tracking -v)",
+      "Bash(pytest tests/test_stac_item_generator.py -v)",
+      "Bash(pytest tests/test_stac_item_generator.py::test_write_items_featurecollection -v)",
+      "Bash(pytest tests/test_stac_collection_generator.py -k \"incremental\" -v)",
+      "Bash(pytest tests/test_convertor.py::test_convert_file_produces_items_json -v)",
+      "Bash(pytest \"tests/test_convertor.py::TestConvertFile::test_convert_file_produces_items_json\" -v)",
+      "Bash(pytest tests/test_convertor.py -v)",
+      "Bash(geojson2stac data/CTRY_PARK.json)",
+      "Bash(python -c \"import json; d=json.load\\(open\\('stac/CTRY_PARK/items.json'\\)\\); print\\(f'type={d[\\\\\"type\\\\\"]}, features={len\\(d[\\\\\"features\\\\\"]\\)}'\\)\")",
+      "Bash(python -c \"import json; d=json.load\\(open\\('stac/CTRY_PARK/collection.json'\\)\\); print\\(f'items link={next\\(l[\\\\\"href\\\\\"] for l in d[\\\\\"links\\\\\"] if l[\\\\\"rel\\\\\"]==\\\\\"items\\\\\"\\)}'\\)\")",
+      "Bash(python -c \"import json; d=json.load\\(open\\('stac/CTRY_PARK/items.json', encoding='utf-8'\\)\\); print\\(f'type={d[\\\\\"type\\\\\"]}, features={len\\(d[\\\\\"features\\\\\"]\\)}'\\)\")",
+      "Bash(git log *)",
+      "Bash(python -m pytest -v)",
+      "Bash(pytest -q)",
+      "Bash(pytest --ignore=tests/test_readme.py -q)",
+      "Bash(git checkout *)",
+      "Bash(git pull *)",
+      "Bash(git merge *)",
+      "Bash(git branch *)"
     ]
   }
 }
