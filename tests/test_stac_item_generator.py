@@ -44,6 +44,18 @@ class TestHandleDuplicateIDs:
 
 
 class TestFeatureToItem:
+    def test_inline_duplicate_tracking(self):
+        seen_ids = {}
+        feature1 = {"properties": {"NAME_EN": "Park A"}, "geometry": {"type": "Point", "coordinates": [114.0, 22.0]}}
+        feature2 = {"properties": {"NAME_EN": "Park A"}, "geometry": {"type": "Point", "coordinates": [114.1, 22.1]}}  # duplicate
+
+        item1 = feature_to_item(feature1, "EPSG:4326", seen_ids)
+        item2 = feature_to_item(feature2, "EPSG:4326", seen_ids)
+
+        assert item1["id"] == "park-a"
+        assert item2["id"] == "park-a-1"
+        assert seen_ids == {"park-a": 1, "park-a-1": 0}
+
     def test_point_feature_to_item(self):
         feature = {
             "type": "Feature",
