@@ -137,7 +137,7 @@ def generate_collection(collection_id: str, items: list[dict[str, Any]]) -> dict
             },
             {
                 "rel": "items",
-                "href": "items/",
+                "href": "items.json",
                 "type": "application/geo+json",
             },
             {
