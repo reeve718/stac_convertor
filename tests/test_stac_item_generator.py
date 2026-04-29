@@ -3,6 +3,7 @@ from src.stac_item_generator import (
     generate_item_id,
     handle_duplicate_ids,
     feature_to_item,
+    write_items_featurecollection,
 )
 
 
@@ -71,3 +72,18 @@ class TestFeatureToItem:
         # Geometry should be transformed to WGS84
         assert 114.2 < item["geometry"]["coordinates"][0] < 114.4
         assert 22.2 < item["geometry"]["coordinates"][1] < 22.4
+
+
+def test_write_items_featurecollection(tmp_path):
+    import json
+    items = [
+        {"id": "park-a", "type": "Feature", "geometry": {}, "bbox": [], "properties": {}},
+        {"id": "park-b", "type": "Feature", "geometry": {}, "bbox": [], "properties": {}},
+    ]
+    output_path = tmp_path / "items.json"
+    write_items_featurecollection(items, str(output_path))
+
+    with open(output_path) as f:
+        result = json.load(f)
+    assert result["type"] == "FeatureCollection"
+    assert len(result["features"]) == 2
