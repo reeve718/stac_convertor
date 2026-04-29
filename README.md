@@ -28,10 +28,7 @@ Output is written to `stac/CTRY_PARK/`:
 ```
 stac/CTRY_PARK/
 ├── collection.json        ← STAC Collection
-└── items/
-    ├── clear-water-bay-country-park.json
-    ├── pok-fu-lam-country-park.json
-    └── ... (one file per feature)
+└── items.json            ← STAC Items (GeoJSON FeatureCollection)
 ```
 
 ## CLI Reference
