@@ -141,7 +141,18 @@
       "Read(//tmp/stac_test/**)",
       "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac add README.md pyproject.toml)",
       "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac add requirements.txt)",
-      "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac commit -m \"chore: add requirements.txt for pip install\")"
+      "Bash(git -C /c/Github/stac_convertor/.worktrees/geojson-to-stac commit -m \"chore: add requirements.txt for pip install\")",
+      "Bash(pytest tests/test_readme.py::test_readme_has_installation_section -v)",
+      "Bash(dir \"C:\\\\Users\\\\Reeve\\\\Documents\\\\Github\\\\stac_convertor\\\\.worktrees\\\\fix-readme-test-assertion\")",
+      "Bash(python -m pytest tests/test_readme.py::test_readme_has_installation_section -v)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor/.worktrees/fix-readme-test-assertion\" test)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor\" merge-base HEAD master)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor\" checkout master)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor\" pull)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor\" merge fix/readme-test-assertion)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor\" python -m pytest tests/test_readme.py -v)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor\" branch -d fix/readme-test-assertion)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor\" worktree remove \".worktrees/fix-readme-test-assertion\")"
     ]
   }
 }
