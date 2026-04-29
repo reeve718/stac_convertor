@@ -37,9 +37,21 @@ def handle_duplicate_ids(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
-def feature_to_item(feature: dict[str, Any], crs: str) -> dict[str, Any]:
+def feature_to_item(feature: dict[str, Any], crs: str, seen_ids: dict[str, int] | None = None) -> dict[str, Any]:
+    if seen_ids is None:
+        seen_ids = {}
+
     props = feature.get("properties", {})
     item_id = generate_item_id(feature)
+
+    # Handle duplicate IDs inline
+    if item_id in seen_ids:
+        seen_ids[item_id] += 1
+        item_id = f"{item_id}-{seen_ids[item_id]}"
+        seen_ids[item_id] = 0
+    else:
+        seen_ids[item_id] = 0
+
     geom = feature.get("geometry")
     if not geom:
         geom = {"type": "Point", "coordinates": []}
@@ -65,7 +77,7 @@ def feature_to_item(feature: dict[str, Any], crs: str) -> dict[str, Any]:
         "links": [
             {
                 "rel": "self",
-                "href": f"items/{item_id}.json",
+                "href": f"items.json",
                 "type": "application/geo+json",
             },
             {
@@ -87,3 +99,17 @@ def write_item(item: dict[str, Any], output_path: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(item, f, indent=2, ensure_ascii=False)
+
+
+def write_items_featurecollection(items: list[dict[str, Any]], output_path: str) -> None:
+    """Write all items to a single GeoJSON FeatureCollection file."""
+    import json
+    from pathlib import Path
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    collection = {
+        "type": "FeatureCollection",
+        "features": items,
+    }
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(collection, f, indent=2, ensure_ascii=False)

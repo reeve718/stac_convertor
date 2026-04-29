@@ -6,6 +6,8 @@ from src.geojson_parser import (
     validate_featurecollection,
     extract_features,
     detect_crs,
+    stream_features,
+    stream_geojson,
 )
 
 
@@ -75,3 +77,35 @@ class TestDetectCRS:
             "features": [],
         }
         assert detect_crs(fc) == "EPSG:4326"
+
+
+def test_stream_features_yields_features(tmp_path):
+    import ijson
+    fc = {
+        "type": "FeatureCollection",
+        "crs": {"type": "name", "properties": {"name": "EPSG:2326"}},
+        "features": [
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1, 2]}, "properties": {"NAME_EN": "Park A"}},
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [3, 4]}, "properties": {"NAME_EN": "Park B"}},
+        ]
+    }
+    path = tmp_path / "test.json"
+    path.write_text(json.dumps(fc))
+    features = list(stream_features(path))
+    assert len(features) == 2
+
+
+def test_stream_features_extracts_crs(tmp_path):
+    fc = {
+        "type": "FeatureCollection",
+        "crs": {"type": "name", "properties": {"name": "EPSG:2326"}},
+        "features": [
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1, 2]}, "properties": {"NAME_EN": "Park"}},
+        ]
+    }
+    path = tmp_path / "test.json"
+    path.write_text(json.dumps(fc))
+    result = list(stream_geojson(path))
+    assert len(result) == 1
+    feature, crs = result[0]
+    assert crs == "EPSG:2326"

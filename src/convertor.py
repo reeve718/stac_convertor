@@ -1,32 +1,30 @@
 """Main conversion logic - orchestrate all modules."""
 from pathlib import Path
 from typing import Any
-from geojson_parser import parse_geojson, extract_features, detect_crs
-from stac_item_generator import feature_to_item, handle_duplicate_ids, write_item
-from stac_collection_generator import generate_collection, write_collection
+from geojson_parser import stream_geojson
+from stac_item_generator import feature_to_item, write_items_featurecollection
+from stac_collection_generator import start_collection, update_collection, finalize_collection, write_collection
 
 
 def convert_file(input_path: Path, output_dir: Path) -> None:
-    fc = parse_geojson(input_path)
-    features = extract_features(fc)
-    crs = detect_crs(fc)
     base_name = input_path.stem
-
     collection_output_dir = output_dir / base_name
-    items_output_dir = collection_output_dir / "items"
-    items_output_dir.mkdir(parents=True, exist_ok=True)
+    collection_output_dir.mkdir(parents=True, exist_ok=True)
 
+    collection_state = start_collection(base_name)
+    seen_ids = {}
     items = []
-    for feature in features:
-        item = feature_to_item(feature, crs)
+
+    for feature, crs in stream_geojson(input_path):
+        item = feature_to_item(feature, crs, seen_ids)
         items.append(item)
+        collection_state = update_collection(collection_state, item)
 
-    items = handle_duplicate_ids(items)
+    # Write items.json (FeatureCollection)
+    items_path = collection_output_dir / "items.json"
+    write_items_featurecollection(items, str(items_path))
 
-    for item in items:
-        item_path = items_output_dir / f"{item['id']}.json"
-        write_item(item, str(item_path))
-
-    collection = generate_collection(base_name, items)
+    # Write collection.json
+    collection = finalize_collection(collection_state, base_name)
     collection_path = collection_output_dir / "collection.json"
     write_collection(collection, str(collection_path))

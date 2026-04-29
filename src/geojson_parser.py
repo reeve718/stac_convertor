@@ -1,4 +1,5 @@
 """Parse and validate GeoJSON FeatureCollections."""
+import ijson
 import json
 import sys
 from pathlib import Path
@@ -57,3 +58,36 @@ def validate_geometry_type(geom_type: str) -> None:
     if geom_type not in SUPPORTED_GEOMETRY_TYPES:
         print(f"Error: Unsupported geometry type: {geom_type}", file=sys.stderr)
         sys.exit(1)
+
+
+def stream_features(path: Path) -> Any:
+    """Stream features from a GeoJSON file using ijson."""
+    if not path.exists():
+        print(f"Error: File not found: {path}", file=sys.stderr)
+        sys.exit(1)
+    with open(path, "rb") as f:
+        # ijson yields events; we parse the 'features.item' path to get features
+        parser = ijson.items(f, "features.item")
+        for feature in parser:
+            yield feature
+
+
+def stream_geojson(path: Path) -> Any:
+    """Stream features and CRS from a GeoJSON file.
+
+    Yields:
+        Tuple of (feature, crs) where crs is the EPSG string or "EPSG:4326" default.
+    """
+    crs = "EPSG:4326"
+    with open(path, "rb") as f:
+        # First pass: extract crs from the root object
+        for prefix, event, value in ijson.parse(f):
+            if prefix == "crs.properties.name" and event == "string":
+                if value.startswith("EPSG:"):
+                    crs = value
+                    break
+    # Reset file and stream features
+    with open(path, "rb") as f:
+        parser = ijson.items(f, "features.item")
+        for feature in parser:
+            yield feature, crs

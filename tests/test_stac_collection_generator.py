@@ -1,6 +1,16 @@
 import pytest
-from src.stac_collection_generator import generate_collection, write_collection
+from src.stac_collection_generator import generate_collection, write_collection, start_collection, update_collection, finalize_collection
 from datetime import datetime, timezone
+
+
+def test_incremental_collection_state():
+    state = start_collection("test-collection")
+    state = update_collection(state, {"bbox": [114.0, 22.0, 114.1, 22.1]})
+    state = update_collection(state, {"bbox": [114.2, 22.2, 114.3, 22.3]})
+
+    collection = finalize_collection(state, "test-collection")
+    assert collection["bbox"] == [114.0, 22.0, 114.3, 22.3]
+    assert collection["properties"]["item_count"] == 2
 
 
 class TestGenerateCollection:

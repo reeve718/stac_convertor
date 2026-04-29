@@ -3,6 +3,7 @@ from src.stac_item_generator import (
     generate_item_id,
     handle_duplicate_ids,
     feature_to_item,
+    write_items_featurecollection,
 )
 
 
@@ -44,6 +45,18 @@ class TestHandleDuplicateIDs:
 
 
 class TestFeatureToItem:
+    def test_inline_duplicate_tracking(self):
+        seen_ids = {}
+        feature1 = {"properties": {"NAME_EN": "Park A"}, "geometry": {"type": "Point", "coordinates": [114.0, 22.0]}}
+        feature2 = {"properties": {"NAME_EN": "Park A"}, "geometry": {"type": "Point", "coordinates": [114.1, 22.1]}}  # duplicate
+
+        item1 = feature_to_item(feature1, "EPSG:4326", seen_ids)
+        item2 = feature_to_item(feature2, "EPSG:4326", seen_ids)
+
+        assert item1["id"] == "park-a"
+        assert item2["id"] == "park-a-1"
+        assert seen_ids == {"park-a": 1, "park-a-1": 0}
+
     def test_point_feature_to_item(self):
         feature = {
             "type": "Feature",
@@ -59,3 +72,18 @@ class TestFeatureToItem:
         # Geometry should be transformed to WGS84
         assert 114.2 < item["geometry"]["coordinates"][0] < 114.4
         assert 22.2 < item["geometry"]["coordinates"][1] < 22.4
+
+
+def test_write_items_featurecollection(tmp_path):
+    import json
+    items = [
+        {"id": "park-a", "type": "Feature", "geometry": {}, "bbox": [], "properties": {}},
+        {"id": "park-b", "type": "Feature", "geometry": {}, "bbox": [], "properties": {}},
+    ]
+    output_path = tmp_path / "items.json"
+    write_items_featurecollection(items, str(output_path))
+
+    with open(output_path) as f:
+        result = json.load(f)
+    assert result["type"] == "FeatureCollection"
+    assert len(result["features"]) == 2
