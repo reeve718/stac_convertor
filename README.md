@@ -42,6 +42,7 @@ geojson2stac INPUT_FILE [-o OUTPUT_DIR] [-v]
 | --- | --- | --- |
 | `INPUT_FILE` | Path to GeoJSON file (required) | — |
 | `-o`, `--output` | Output directory | `stac/` |
+| `--output-format` | Output format: `stac` (default) or `bulk` | `stac` |
 | `-v`, `--verbose` | Enable verbose output | `false` |
 
 **Examples:**
@@ -52,6 +53,9 @@ geojson2stac data/CTRY_PARK.json
 
 # Custom output directory
 geojson2stac data/CTRY_PARK.json -o ./output
+
+# Bulk format for API import
+geojson2stac data/CTRY_PARK.json --output-format bulk
 
 # Verbose mode
 geojson2stac data/CTRY_PARK.json -v
