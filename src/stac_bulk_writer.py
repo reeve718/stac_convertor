@@ -43,7 +43,8 @@ def transform_to_bulk_format(stac_featurecollection: dict[str, Any], collection_
             "stac_version": "1.0.0",
         }
 
-        items[str(idx)] = bulk_item
+        objectid = props.get("OBJECTID")
+        items[str(objectid if objectid is not None else idx)] = bulk_item
 
     return {
         "items": items,
