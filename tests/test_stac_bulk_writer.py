@@ -29,7 +29,7 @@ def test_transform_featurecollection_to_bulk_format():
 
     assert result == {
         "items": {
-            "0": {
+            "1": {
                 "id": "1",
                 "type": "Feature",
                 "geometry": {"type": "Point", "coordinates": [114.29, 22.29]},
@@ -68,7 +68,7 @@ def test_transform_uses_objectid_as_id():
         ]
     }
     result = transform_to_bulk_format(stac_input, "test-collection")
-    assert result["items"]["0"]["id"] == "42"
+    assert result["items"]["42"]["id"] == "42"
 
 def test_transform_strips_links_and_assets():
     """Bulk format does not include links or assets."""
@@ -88,8 +88,8 @@ def test_transform_strips_links_and_assets():
         ]
     }
     result = transform_to_bulk_format(stac_input, "collection")
-    assert "links" not in result["items"]["0"]
-    assert "assets" not in result["items"]["0"]
+    assert "links" not in result["items"]["1"]
+    assert "assets" not in result["items"]["1"]
 
 def test_transform_default_datetime():
     """Missing datetime uses default '1900-01-01T00:00:00'."""
@@ -109,7 +109,7 @@ def test_transform_default_datetime():
         ]
     }
     result = transform_to_bulk_format(stac_input, "collection")
-    assert result["items"]["0"]["properties"]["datetime"] == "1900-01-01T00:00:00"
+    assert result["items"]["1"]["properties"]["datetime"] == "1900-01-01T00:00:00"
 
 def test_transform_adds_collection_field():
     """Each item gets collection field from parameter."""
@@ -129,7 +129,7 @@ def test_transform_adds_collection_field():
         ]
     }
     result = transform_to_bulk_format(stac_input, "my-collection")
-    assert result["items"]["0"]["collection"] == "my-collection"
+    assert result["items"]["1"]["collection"] == "my-collection"
 
 def test_transform_multiple_items():
     """Multiple features become multiple string-keyed items."""
@@ -159,8 +159,8 @@ def test_transform_multiple_items():
         ]
     }
     result = transform_to_bulk_format(stac_input, "collection")
-    assert "0" in result["items"]
     assert "1" in result["items"]
-    assert result["items"]["0"]["id"] == "1"
-    assert result["items"]["1"]["id"] == "2"
+    assert "2" in result["items"]
+    assert result["items"]["1"]["id"] == "1"
+    assert result["items"]["2"]["id"] == "2"
     assert result["method"] == "insert"
