@@ -161,7 +161,18 @@
       "Bash(git -C \".worktrees/fix-readme-lint\" python -m pytest tests/ -q)",
       "Bash(python -m pytest tests/ -q)",
       "Bash(git -C \".worktrees/fix-readme-lint\" rev-parse HEAD~1)",
-      "Bash(git -C \".worktrees/fix-readme-lint\" rev-parse HEAD)"
+      "Bash(git -C \".worktrees/fix-readme-lint\" rev-parse HEAD)",
+      "Bash(pytest tests/test_stac_bulk_writer.py -v)",
+      "Bash(python -m pytest tests/test_stac_bulk_writer.py -v)",
+      "Bash(python -c \"from convertor import convert_file; import inspect; print\\(inspect.signature\\(convert_file\\)\\)\")",
+      "Bash(python -m pytest tests/ -v --tb=short)",
+      "Bash(python -m src.cli data/CTRY_PARK.json -o test-data/bulk-test --output-format bulk)",
+      "Bash(python -m src.cli data/CTRY_PARK.json -o test-data/stac-test)",
+      "Bash(git -C \".worktrees/add-bulk-insert-format\" test)",
+      "Bash(git -C \".worktrees/fix-bulk-item-key-match\" show HEAD -- src/stac_bulk_writer.py)",
+      "Bash(python -m pytest tests/test_stac_bulk_writer.py::test_transform_uses_objectid_as_id -v)",
+      "Bash(python -m pytest tests/test_stac_bulk_writer.py::test_transform_featurecollection_to_bulk_format -v --tb=short)",
+      "Bash(python -c ' *)"
     ]
   }
 }

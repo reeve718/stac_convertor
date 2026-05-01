@@ -10,5 +10,6 @@ tests/test_convertor.py
 tests/test_crs_transformer.py
 tests/test_geojson_parser.py
 tests/test_readme.py
+tests/test_stac_bulk_writer.py
 tests/test_stac_collection_generator.py
 tests/test_stac_item_generator.py
