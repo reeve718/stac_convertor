@@ -31,6 +31,22 @@ def expand_input_pattern(input_path: Path, output_dir: Path) -> list[Path]:
     return [input_path] if input_path.is_file() else []
 
 
+def expand_input_dir(input_dir: Path, output_dir: Path) -> list[Path]:
+    """
+    Get all .json files in a directory for batch conversion.
+
+    Args:
+        input_dir: Directory containing GeoJSON files
+        output_dir: Output directory (unused, for API consistency)
+
+    Returns:
+        List of .json file paths in the directory
+    """
+    if not input_dir.is_dir():
+        return []
+    return sorted([f for f in input_dir.iterdir() if f.suffix == ".json" and f.is_file()])
+
+
 @app.command()
 def main(
     input_file: Path = typer.Argument(..., exists=True, readable=True, help="Path to GeoJSON file"),
