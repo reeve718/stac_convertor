@@ -5,7 +5,7 @@ from typing import Any
 from crs_transformer import transform_geometry, calculate_bbox
 
 
-def generate_item_id(feature: dict[str, Any]) -> str:
+def generate_item_id(feature: dict[str, Any], fallback_index: int | None = None) -> str:
     props = feature.get("properties", {})
     name = props.get("NAME_EN")
     if name:
@@ -15,6 +15,8 @@ def generate_item_id(feature: dict[str, Any]) -> str:
     objectid = props.get("OBJECTID")
     if objectid is not None:
         return f"item-{objectid}"
+    if fallback_index is not None:
+        return f"item-{fallback_index}"
     raise ValueError("Feature must have NAME_EN or OBJECTID property")
 
 
@@ -37,12 +39,17 @@ def handle_duplicate_ids(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
-def feature_to_item(feature: dict[str, Any], crs: str, seen_ids: dict[str, int] | None = None) -> dict[str, Any]:
+def feature_to_item(
+    feature: dict[str, Any],
+    crs: str,
+    seen_ids: dict[str, int] | None = None,
+    index: int | None = None,
+) -> dict[str, Any]:
     if seen_ids is None:
         seen_ids = {}
 
     props = feature.get("properties", {})
-    item_id = generate_item_id(feature)
+    item_id = generate_item_id(feature, index)
 
     # Handle duplicate IDs inline
     if item_id in seen_ids:

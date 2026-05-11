@@ -27,9 +27,13 @@ def transform_to_bulk_format(stac_featurecollection: dict[str, Any], collection_
         if not datetime_val:
             datetime_val = DEFAULT_DATETIME
 
+        # Determine key/id: OBJECTID if present, otherwise sequential index
+        objectid = props.get("OBJECTID")
+        key = str(objectid) if objectid is not None else str(idx)
+
         # Build bulk item - strip links/assets, add collection and stac_version
         bulk_item = {
-            "id": str(props.get("OBJECTID", idx)),
+            "id": key,
             "type": "Feature",
             "geometry": feature.get("geometry"),
             "bbox": feature.get("bbox"),
@@ -43,8 +47,7 @@ def transform_to_bulk_format(stac_featurecollection: dict[str, Any], collection_
             "stac_version": "1.0.0",
         }
 
-        objectid = props.get("OBJECTID")
-        items[str(objectid if objectid is not None else idx)] = bulk_item
+        items[key] = bulk_item
 
     return {
         "items": items,

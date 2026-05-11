@@ -23,6 +23,16 @@ class TestGenerateItemID:
         item_id = generate_item_id(feature)
         assert item_id == "sai-kung-east-country-park"
 
+    def test_id_fallback_to_index(self):
+        feature = {"properties": {}}
+        item_id = generate_item_id(feature, fallback_index=5)
+        assert item_id == "item-5"
+
+    def test_id_no_fallback_raises(self):
+        feature = {"properties": {}}
+        with pytest.raises(ValueError, match="NAME_EN or OBJECTID"):
+            generate_item_id(feature)
+
 
 class TestHandleDuplicateIDs:
     def test_no_duplicates(self):

@@ -172,7 +172,9 @@
       "Bash(git -C \".worktrees/fix-bulk-item-key-match\" show HEAD -- src/stac_bulk_writer.py)",
       "Bash(python -m pytest tests/test_stac_bulk_writer.py::test_transform_uses_objectid_as_id -v)",
       "Bash(python -m pytest tests/test_stac_bulk_writer.py::test_transform_featurecollection_to_bulk_format -v --tb=short)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(python -c \"open\\('claude.md', 'rb'\\).read\\(\\).endswith\\(b'\\\\n'\\)\")",
+      "Bash(python -c \"print\\(open\\('claude.md', 'rb'\\).read\\(\\).endswith\\(b'\\\\n'\\)\\)\")"
     ]
   }
 }
