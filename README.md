@@ -35,12 +35,14 @@ stac/CTRY_PARK/
 ## CLI Reference
 
 ```bash
-geojson2stac INPUT_FILE [-o OUTPUT_DIR] [-v]
+geojson2stac INPUT_FILE [-o OUTPUT_DIR] [--output-format FORMAT] [-v]
+geojson2stac --input-dir INPUT_DIR [-o OUTPUT_DIR] [--output-format FORMAT] [-v]
 ```
 
 | Argument / Option | Description | Default |
 | --- | --- | --- |
-| `INPUT_FILE` | Path to GeoJSON file (required) | — |
+| `INPUT_FILE` | Path to GeoJSON file or glob pattern (e.g. `data/*.json`) | — |
+| `--input-dir` | Directory containing GeoJSON files to convert | — |
 | `-o`, `--output` | Output directory | `stac/` |
 | `--output-format` | Output format: `stac` (default) or `bulk` | `stac` |
 | `-v`, `--verbose` | Enable verbose output | `false` |
@@ -48,8 +50,11 @@ geojson2stac INPUT_FILE [-o OUTPUT_DIR] [-v]
 **Examples:**
 
 ```bash
-# Basic usage
-geojson2stac data/CTRY_PARK.json
+# Convert all files in a directory
+geojson2stac --input-dir data/
+
+# Convert files matching glob pattern
+geojson2stac "data/*.json"
 
 # Custom output directory
 geojson2stac data/CTRY_PARK.json -o ./output
