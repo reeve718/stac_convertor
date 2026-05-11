@@ -1,5 +1,6 @@
 """CLI entry point for geojson2stac."""
 import sys
+import glob as glob_module
 import typer
 from pathlib import Path
 from typing import Annotated
@@ -7,6 +8,27 @@ from convertor import convert_file
 
 
 app = typer.Typer(help="Convert GeoJSON FeatureCollections to STAC Collections and Items")
+
+
+def expand_input_pattern(input_path: Path, output_dir: Path) -> list[Path]:
+    """
+    Expand input path to list of matching file paths.
+
+    If input_path contains '*', treat as glob pattern and expand.
+    Otherwise, return single-element list.
+
+    Args:
+        input_path: File path or glob pattern
+        output_dir: Output directory (unused, for API consistency)
+
+    Returns:
+        List of matching file paths
+    """
+    input_str = str(input_path)
+    if '*' in input_str:
+        matches = glob_module.glob(input_str, recursive=False)
+        return [Path(m) for m in matches if Path(m).is_file()]
+    return [input_path] if input_path.is_file() else []
 
 
 @app.command()
