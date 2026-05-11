@@ -6,6 +6,7 @@ src/stac_convertor.egg-info/dependency_links.txt
 src/stac_convertor.egg-info/entry_points.txt
 src/stac_convertor.egg-info/requires.txt
 src/stac_convertor.egg-info/top_level.txt
+tests/test_cli.py
 tests/test_convertor.py
 tests/test_crs_transformer.py
 tests/test_geojson_parser.py
