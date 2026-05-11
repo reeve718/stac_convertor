@@ -1,5 +1,8 @@
 from pathlib import Path
-from cli import expand_input_pattern, expand_input_dir
+from typer.testing import CliRunner
+from cli import expand_input_pattern, expand_input_dir, app
+
+runner = CliRunner()
 
 
 def test_expand_input_pattern_glob():
@@ -39,3 +42,10 @@ def test_expand_input_dir_non_json_skipped():
     """Non-.json files should be silently skipped."""
     files = expand_input_dir(Path("test-data"), Path("stac"))
     assert all(f.suffix == ".json" for f in files)
+
+
+def test_mutual_exclusivity_error():
+    """Providing both input_file and --input-dir should error."""
+    result = runner.invoke(app, ["data/CTRY_PARK.json", "--input-dir", "data/"])
+    assert result.exit_code != 0
+    assert "mutually exclusive" in result.output.lower() or "cannot use both" in result.output.lower()

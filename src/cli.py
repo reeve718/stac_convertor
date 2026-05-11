@@ -1,6 +1,5 @@
 """CLI entry point for geojson2stac."""
 import sys
-import glob as glob_module
 import typer
 from pathlib import Path
 from typing import Annotated
@@ -8,6 +7,79 @@ from convertor import convert_file
 
 
 app = typer.Typer(help="Convert GeoJSON FeatureCollections to STAC Collections and Items")
+
+
+@app.command()
+def main(
+    input_file: Annotated[Path, typer.Argument(
+        readable=True,
+        help="Path to GeoJSON file or glob pattern (e.g., data/*.json)"
+    )] = None,
+    output_dir: Path = typer.Option(
+        Path("stac"), "--output", "-o", help="Output directory (default: stac/)"
+    ),
+    input_dir: Annotated[Path, typer.Option(
+        "--input-dir", help="Directory containing GeoJSON files to convert"
+    )] = None,
+    output_format: str = typer.Option("stac", "--output-format", help="Output format: stac or bulk"),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output"),
+) -> None:
+    """Convert GeoJSON files to STAC format."""
+    # Handle mutual exclusivity
+    if input_file is not None and input_dir is not None:
+        print("Error: Cannot use both INPUT_FILE and --input-dir. They are mutually exclusive.", file=sys.stderr)
+        raise typer.Exit(1)
+
+    # Validate input_file exists if provided (and not a glob pattern)
+    if input_file is not None and '*' not in str(input_file) and not input_file.exists():
+        print(f"Error: INPUT_FILE '{input_file}' does not exist.", file=sys.stderr)
+        raise typer.Exit(1)
+
+    # Collect files to process
+    if input_dir is not None:
+        files = expand_input_dir(input_dir, output_dir)
+        if not files:
+            print(f"Warning: No .json files found in {input_dir}", file=sys.stderr)
+            return
+        mode = "directory"
+    elif input_file is not None:
+        input_str = str(input_file)
+        if '*' in input_str:
+            files = expand_input_pattern(input_file, output_dir)
+            mode = "glob"
+        else:
+            files = [input_file]
+            mode = "single"
+    else:
+        print("Error: Must provide INPUT_FILE or --input-dir", file=sys.stderr)
+        raise typer.Exit(1)
+
+    # Process files
+    succeeded = 0
+    failed = 0
+    errors = []
+
+    for file_path in files:
+        try:
+            if verbose:
+                print(f"Converting: {file_path}")
+            convert_file(file_path, output_dir, output_format=output_format)
+            succeeded += 1
+        except Exception as e:
+            failed += 1
+            errors.append((file_path, str(e)))
+            if verbose:
+                print(f"Error converting {file_path}: {e}", file=sys.stderr)
+
+    # Summary output
+    if mode in ("directory", "glob"):
+        if failed > 0:
+            print(f"\nBatch complete: {succeeded} succeeded, {failed} failed", file=sys.stderr)
+            for path, err in errors:
+                print(f"  - {path}: {err}", file=sys.stderr)
+            raise typer.Exit(1)
+        else:
+            print(f"\nBatch complete: {succeeded} succeeded")
 
 
 def expand_input_pattern(input_path: Path, output_dir: Path) -> list[Path]:
@@ -26,6 +98,7 @@ def expand_input_pattern(input_path: Path, output_dir: Path) -> list[Path]:
     """
     input_str = str(input_path)
     if '*' in input_str:
+        import glob as glob_module
         matches = glob_module.glob(input_str, recursive=False)
         return [Path(m) for m in matches if Path(m).is_file()]
     return [input_path] if input_path.is_file() else []
@@ -45,27 +118,6 @@ def expand_input_dir(input_dir: Path, output_dir: Path) -> list[Path]:
     if not input_dir.is_dir():
         return []
     return sorted([f for f in input_dir.iterdir() if f.suffix == ".json" and f.is_file()])
-
-
-@app.command()
-def main(
-    input_file: Path = typer.Argument(..., exists=True, readable=True, help="Path to GeoJSON file"),
-    output_dir: Path = typer.Option(
-        Path("stac"), "--output", "-o", help="Output directory (default: stac/)"
-    ),
-    output_format: Annotated[str, typer.Option("--output-format", help="Output format: stac or bulk")] = "stac",
-    verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output"),
-) -> None:
-    if verbose:
-        print(f"Converting: {input_file}")
-        print(f"Output directory: {output_dir}")
-
-    try:
-        convert_file(input_file, output_dir, output_format=output_format)
-        print(f"Successfully converted {input_file} -> {output_dir / input_file.stem}")
-    except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
-        raise typer.Exit(1)
 
 
 if __name__ == "__main__":
