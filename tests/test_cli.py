@@ -59,7 +59,7 @@ def test_batch_convert_directory(tmp_path):
     stac_dir = tmp_path / "stac"
 
     # Copy actual sample data for testing
-    sample = Path("data/CTRY_PARK.json")
+    sample = Path("test-data/CTRY_PARK.json")
     if sample.exists():
         (data_dir / "file1.json").write_bytes(sample.read_bytes())
         (data_dir / "file2.json").write_bytes(sample.read_bytes())
@@ -87,4 +87,4 @@ def test_batch_error_handling_continues(tmp_path):
 
     # Should complete with non-zero exit and report failure
     assert result.exit_code != 0
-    assert "1 succeeded, 1 failed" in result.output or "failed" in result.output.lower()
+    assert "1 succeeded, 1 failed" in result.output, f"Expected batch summary, got: {result.output}"
