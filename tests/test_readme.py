@@ -52,6 +52,16 @@ def test_readme_has_crs_explanation():
     assert "WGS84" in content or "EPSG:4326" in content
 
 
+def test_readme_documents_input_dir_option():
+    content = read_readme()
+    assert "--input-dir" in content
+
+
+def test_readme_documents_glob_pattern():
+    content = read_readme()
+    assert "*.json" in content or "glob" in content.lower()
+
+
 def test_readme_helper_reads_content():
     content = read_readme()
     assert content, "read_readme() must return non-empty content"
