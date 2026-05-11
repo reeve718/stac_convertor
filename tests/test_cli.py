@@ -49,3 +49,42 @@ def test_mutual_exclusivity_error():
     result = runner.invoke(app, ["data/CTRY_PARK.json", "--input-dir", "data/"])
     assert result.exit_code != 0
     assert "mutually exclusive" in result.output.lower() or "cannot use both" in result.output.lower()
+
+
+def test_batch_convert_directory(tmp_path):
+    """--input-dir should convert all .json files in directory."""
+    # Create test input files
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    stac_dir = tmp_path / "stac"
+
+    # Copy actual sample data for testing
+    sample = Path("data/CTRY_PARK.json")
+    if sample.exists():
+        (data_dir / "file1.json").write_bytes(sample.read_bytes())
+        (data_dir / "file2.json").write_bytes(sample.read_bytes())
+
+        result = runner.invoke(app, ["--input-dir", str(data_dir), "-o", str(stac_dir)])
+
+        assert result.exit_code == 0
+        assert (stac_dir / "file1").exists()
+        assert (stac_dir / "file2").exists()
+        assert (stac_dir / "file1" / "collection.json").exists()
+        assert (stac_dir / "file2" / "collection.json").exists()
+
+
+def test_batch_error_handling_continues(tmp_path):
+    """If one file fails, processing continues and reports at end."""
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    stac_dir = tmp_path / "stac"
+
+    # Create a corrupt file and a valid one
+    (data_dir / "valid.json").write_text('{"type":"FeatureCollection","features":[]}')
+    (data_dir / "invalid.json").write_text('not json')
+
+    result = runner.invoke(app, ["--input-dir", str(data_dir), "-o", str(stac_dir)])
+
+    # Should complete with non-zero exit and report failure
+    assert result.exit_code != 0
+    assert "1 succeeded, 1 failed" in result.output or "failed" in result.output.lower()
