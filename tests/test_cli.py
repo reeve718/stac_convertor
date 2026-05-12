@@ -88,3 +88,21 @@ def test_batch_error_handling_continues(tmp_path):
     # Should complete with non-zero exit and report failure
     assert result.exit_code != 0
     assert "1 succeeded, 1 failed" in result.output, f"Expected batch summary, got: {result.output}"
+
+
+def test_expand_input_dir_accepts_geojson_extension(tmp_path):
+    """When directory contains .geojson files, they should be included in batch conversion."""
+    # Arrange
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "file1.json").write_text('{"type": "FeatureCollection", "features": []}')
+    (data_dir / "file2.geojson").write_text('{"type": "FeatureCollection", "features": []}')
+
+    # Act
+    from cli import expand_input_dir
+    result = expand_input_dir(data_dir, tmp_path / "out")
+
+    # Assert
+    assert len(result) == 2
+    assert any(f.suffix == ".json" for f in result)
+    assert any(f.suffix == ".geojson" for f in result)
