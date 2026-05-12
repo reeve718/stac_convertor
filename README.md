@@ -42,7 +42,7 @@ geojson2stac --input-dir INPUT_DIR [-o OUTPUT_DIR] [--output-format FORMAT] [-v]
 | Argument / Option | Description | Default |
 | --- | --- | --- |
 | `INPUT_FILE` | Path to GeoJSON file or glob pattern (e.g. `data/*.json`) | — |
-| `--input-dir` | Directory containing GeoJSON files to convert | — |
+| `--input-dir` | Directory containing GeoJSON files (`.json` or `.geojson`) | — |
 | `-o`, `--output` | Output directory | `stac/` |
 | `--output-format` | Output format: `stac` (default) or `bulk` | `stac` |
 | `-v`, `--verbose` | Enable verbose output | `false` |
