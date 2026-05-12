@@ -39,7 +39,7 @@ def main(
     if input_dir is not None:
         files = expand_input_dir(input_dir, output_dir)
         if not files:
-            print(f"Warning: No .json files found in {input_dir}", file=sys.stderr)
+            print(f"Warning: No .json or .geojson files found in {input_dir}", file=sys.stderr)
             return
         mode = "directory"
     elif input_file is not None:
@@ -106,18 +106,18 @@ def expand_input_pattern(input_path: Path, output_dir: Path) -> list[Path]:
 
 def expand_input_dir(input_dir: Path, output_dir: Path) -> list[Path]:
     """
-    Get all .json files in a directory for batch conversion.
+    Get all .json and .geojson files in a directory for batch conversion.
 
     Args:
         input_dir: Directory containing GeoJSON files
         output_dir: Output directory (unused, for API consistency)
 
     Returns:
-        List of .json file paths in the directory
+        List of .json and .geojson file paths in the directory
     """
     if not input_dir.is_dir():
         return []
-    return sorted([f for f in input_dir.iterdir() if f.suffix == ".json" and f.is_file()])
+    return sorted([f for f in input_dir.iterdir() if f.suffix in (".json", ".geojson") and f.is_file()])
 
 
 if __name__ == "__main__":
