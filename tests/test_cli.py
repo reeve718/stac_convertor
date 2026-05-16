@@ -106,3 +106,42 @@ def test_expand_input_dir_accepts_geojson_extension(tmp_path):
     assert len(result) == 2
     assert any(f.suffix == ".json" for f in result)
     assert any(f.suffix == ".geojson" for f in result)
+
+
+def test_expand_input_dir_recursive(tmp_path):
+    """expand_input_dir with recursive=True should find nested files."""
+    input_dir = tmp_path / "data"
+    input_dir.mkdir()
+    (input_dir / "root.json").write_text('{"type":"FeatureCollection","features":[]}')
+
+    sub_dir = input_dir / "sub"
+    sub_dir.mkdir()
+    (sub_dir / "nested.json").write_text('{"type":"FeatureCollection","features":[]}')
+
+    deep_dir = sub_dir / "deep"
+    deep_dir.mkdir()
+    (deep_dir / "deep_nested.json").write_text('{"type":"FeatureCollection","features":[]}')
+
+    files = expand_input_dir(input_dir, Path("stac"), recursive=True)
+    file_names = {f.name for f in files}
+
+    assert "root.json" in file_names
+    assert "nested.json" in file_names
+    assert "deep_nested.json" in file_names
+
+
+def test_expand_input_dir_non_recursive(tmp_path):
+    """expand_input_dir with recursive=False should NOT find nested files."""
+    input_dir = tmp_path / "data"
+    input_dir.mkdir()
+    (input_dir / "root.json").write_text('{"type":"FeatureCollection","features":[]}')
+
+    sub_dir = input_dir / "sub"
+    sub_dir.mkdir()
+    (sub_dir / "nested.json").write_text('{"type":"FeatureCollection","features":[]}')
+
+    files = expand_input_dir(input_dir, Path("stac"), recursive=False)
+    file_names = {f.name for f in files}
+
+    assert "root.json" in file_names
+    assert "nested.json" not in file_names  # Should NOT be found

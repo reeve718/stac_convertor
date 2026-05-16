@@ -104,20 +104,31 @@ def expand_input_pattern(input_path: Path, output_dir: Path) -> list[Path]:
     return [input_path] if input_path.is_file() else []
 
 
-def expand_input_dir(input_dir: Path, output_dir: Path) -> list[Path]:
+def expand_input_dir(input_dir: Path, output_dir: Path, recursive: bool = False) -> list[Path]:
     """
     Get all .json and .geojson files in a directory for batch conversion.
 
     Args:
         input_dir: Directory containing GeoJSON files
         output_dir: Output directory (unused, for API consistency)
+        recursive: If True, scan subdirectories recursively
 
     Returns:
         List of .json and .geojson file paths in the directory
     """
     if not input_dir.is_dir():
         return []
-    return sorted([f for f in input_dir.iterdir() if f.suffix in (".json", ".geojson") and f.is_file()])
+
+    pattern = "*.json"  # matches both .json and .geojson due to extension stripping
+
+    if recursive:
+        # rglob finds files at all nesting levels
+        files = sorted(input_dir.rglob(pattern))
+    else:
+        # iterdir only finds immediate children
+        files = sorted(f for f in input_dir.iterdir() if f.suffix in (".json", ".geojson") and f.is_file())
+
+    return files
 
 
 if __name__ == "__main__":
