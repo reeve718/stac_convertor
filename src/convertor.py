@@ -10,10 +10,26 @@ from stac_collection_generator import start_collection, update_collection, final
 def convert_file(
     input_path: Path,
     output_dir: Path,
-    output_format: str = "stac"
+    output_format: str = "stac",
+    output_subdir: Path | None = None,
 ) -> None:
+    """Convert a GeoJSON file to STAC format.
+
+    Args:
+        input_path: Path to input GeoJSON file
+        output_dir: Base output directory
+        output_format: Output format ("stac" or "bulk")
+        output_subdir: Optional subdirectory path relative to output_dir.
+                       If provided, used to mirror input folder structure.
+    """
     base_name = input_path.stem
-    collection_output_dir = output_dir / base_name
+
+    # Use output_subdir if provided, otherwise use stem-based subdirectory
+    if output_subdir is not None:
+        collection_output_dir = output_dir / output_subdir / base_name
+    else:
+        collection_output_dir = output_dir / base_name
+
     collection_output_dir.mkdir(parents=True, exist_ok=True)
 
     collection_state = start_collection(base_name)

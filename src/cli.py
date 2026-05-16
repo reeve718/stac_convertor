@@ -127,11 +127,8 @@ def expand_input_dir(input_dir: Path, output_dir: Path, recursive: bool = False)
     if not input_dir.is_dir():
         return []
 
-    pattern = "*.json"  # matches .json files only
-
     if recursive:
-        # rglob finds files at all nesting levels
-        # Need separate globs since rglob with single pattern only matches one extension
+        # rglob finds files at all nesting levels; two calls needed for different extensions
         json_files = sorted(input_dir.rglob("*.json"))
         geojson_files = sorted(input_dir.rglob("*.geojson"))
         files = sorted(set(json_files) | set(geojson_files))
