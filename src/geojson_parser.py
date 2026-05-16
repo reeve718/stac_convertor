@@ -73,21 +73,30 @@ def stream_features(path: Path) -> Any:
 
 
 def stream_geojson(path: Path) -> Any:
-    """Stream features and CRS from a GeoJSON file.
+    """Stream features, CRS, and Transformer from a GeoJSON file.
 
     Yields:
-        Tuple of (feature, crs) where crs is the EPSG string or "EPSG:4326" default.
+        Tuple of (feature, crs, transformer) where crs is the EPSG string
+        and transformer is a reusable pyproj.Transformer instance.
     """
+    from pyproj import Transformer
+
     crs = "EPSG:4326"
+    transformer = None
+
     with open(path, "rb") as f:
-        # First pass: extract crs from the root object
+        # First pass: extract crs from the root object and create Transformer
         for prefix, event, value in ijson.parse(f):
             if prefix == "crs.properties.name" and event == "string":
                 if value.startswith("EPSG:"):
                     crs = value
                     break
+
+    # Create Transformer once with the detected CRS
+    transformer = Transformer.from_crs(crs, "EPSG:4326", always_xy=True)
+
     # Reset file and stream features
     with open(path, "rb") as f:
         parser = ijson.items(f, "features.item")
         for feature in parser:
-            yield feature, crs
+            yield feature, crs, transformer

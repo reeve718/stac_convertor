@@ -96,6 +96,8 @@ def test_stream_features_yields_features(tmp_path):
 
 
 def test_stream_features_extracts_crs(tmp_path):
+    from pyproj import Transformer
+
     fc = {
         "type": "FeatureCollection",
         "crs": {"type": "name", "properties": {"name": "EPSG:2326"}},
@@ -107,5 +109,48 @@ def test_stream_features_extracts_crs(tmp_path):
     path.write_text(json.dumps(fc))
     result = list(stream_geojson(path))
     assert len(result) == 1
-    feature, crs = result[0]
+    feature, crs, transformer = result[0]
     assert crs == "EPSG:2326"
+
+
+def test_stream_geojson_yields_three_values(tmp_path):
+    """stream_geojson should yield (feature, crs, transformer) tuples."""
+    from pyproj import Transformer
+
+    fc = {
+        "type": "FeatureCollection",
+        "crs": {"type": "name", "properties": {"name": "EPSG:2326"}},
+        "features": [
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1, 2]}, "properties": {"NAME_EN": "Park A"}},
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [3, 4]}, "properties": {"NAME_EN": "Park B"}},
+        ]
+    }
+    path = tmp_path / "test.json"
+    path.write_text(json.dumps(fc))
+    for feature, crs, transformer in stream_geojson(path):
+        assert isinstance(feature, dict)
+        assert isinstance(crs, str)
+        assert isinstance(transformer, Transformer)
+        break  # Only check first item
+
+
+def test_transformer_is_reused(tmp_path):
+    """The same transformer instance should be used for all features."""
+    from pyproj import Transformer
+
+    fc = {
+        "type": "FeatureCollection",
+        "crs": {"type": "name", "properties": {"name": "EPSG:2326"}},
+        "features": [
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1, 2]}, "properties": {"NAME_EN": "Park A"}},
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [3, 4]}, "properties": {"NAME_EN": "Park B"}},
+            {"type": "Feature", "geometry": {"type": "Point", "coordinates": [5, 6]}, "properties": {"NAME_EN": "Park C"}},
+        ]
+    }
+    path = tmp_path / "test.json"
+    path.write_text(json.dumps(fc))
+    transformers = []
+    for feature, crs, transformer in stream_geojson(path):
+        transformers.append(transformer)
+    # All transformers should be the same instance
+    assert len(set(id(t) for t in transformers)) == 1, "Transformer should be reused"
