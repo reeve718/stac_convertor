@@ -160,3 +160,34 @@ def test_relative_path_computation(tmp_path):
 
     relative_to_input = file_path.parent.relative_to(input_dir)
     assert str(relative_to_input) == "sub"
+
+
+def test_batch_recursive_preserves_folder_structure(tmp_path):
+    """Verify recursive batch convert preserves folder structure."""
+    from typer.testing import CliRunner
+    from cli import app
+
+    runner = CliRunner()
+
+    # Create nested input structure
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "root.json").write_text('{"type":"FeatureCollection","features":[]}')
+
+    sub_dir = data_dir / "sub"
+    sub_dir.mkdir()
+    (sub_dir / "nested.json").write_text('{"type":"FeatureCollection","features":[]}')
+
+    stac_dir = tmp_path / "stac"
+
+    # Copy actual sample data for real conversion
+    sample = Path("test-data/CTRY_PARK.json")
+    if sample.exists():
+        (data_dir / "root.json").write_bytes(sample.read_bytes())
+        (sub_dir / "nested.json").write_bytes(sample.read_bytes())
+
+        result = runner.invoke(app, ["--input-dir", str(data_dir), "-o", str(stac_dir), "--recursive"])
+
+        assert result.exit_code == 0
+        assert (stac_dir / "root").exists()
+        assert (stac_dir / "sub" / "nested").exists()
