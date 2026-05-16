@@ -145,3 +145,18 @@ def test_expand_input_dir_non_recursive(tmp_path):
 
     assert "root.json" in file_names
     assert "nested.json" not in file_names  # Should NOT be found
+
+
+def test_relative_path_computation(tmp_path):
+    """Output subdirectory should mirror input folder structure."""
+    input_dir = tmp_path / "data"
+    input_dir.mkdir()
+
+    sub_dir = input_dir / "sub"
+    sub_dir.mkdir()
+
+    file_path = sub_dir / "file.json"
+    file_path.write_text('{"type":"FeatureCollection","features":[]}')
+
+    relative_to_input = file_path.parent.relative_to(input_dir)
+    assert str(relative_to_input) == "sub"

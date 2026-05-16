@@ -64,7 +64,14 @@ def main(
         try:
             if verbose:
                 print(f"Converting: {file_path}")
-            convert_file(file_path, output_dir, output_format=output_format)
+
+            # Compute relative output path if recursive
+            if input_dir is not None and recursive:
+                relative_subpath = file_path.parent.relative_to(input_dir)
+                # Pass to convert_file via output_subdir parameter (Task 4)
+                convert_file(file_path, output_dir, output_format=output_format, output_subdir=relative_subpath)
+            else:
+                convert_file(file_path, output_dir, output_format=output_format)
             succeeded += 1
         except Exception as e:
             failed += 1
