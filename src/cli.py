@@ -22,6 +22,7 @@ def main(
         "--input-dir", help="Directory containing GeoJSON files to convert"
     )] = None,
     output_format: str = typer.Option("stac", "--output-format", help="Output format: stac or bulk"),
+    recursive: bool = typer.Option(False, "--recursive", help="Recursively scan subdirectories when used with --input-dir"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output"),
 ) -> None:
     """Convert GeoJSON files to STAC format."""
@@ -37,7 +38,7 @@ def main(
 
     # Collect files to process
     if input_dir is not None:
-        files = expand_input_dir(input_dir, output_dir)
+        files = expand_input_dir(input_dir, output_dir, recursive=recursive)
         if not files:
             print(f"Warning: No .json or .geojson files found in {input_dir}", file=sys.stderr)
             return
