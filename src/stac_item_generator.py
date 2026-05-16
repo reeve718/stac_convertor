@@ -2,6 +2,7 @@
 import re
 from datetime import datetime, timezone
 from typing import Any
+from pyproj import Transformer
 from crs_transformer import transform_geometry, calculate_bbox
 
 
@@ -41,7 +42,7 @@ def handle_duplicate_ids(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def feature_to_item(
     feature: dict[str, Any],
-    crs: str,
+    transformer: Transformer,
     seen_ids: dict[str, int] | None = None,
     index: int | None = None,
 ) -> dict[str, Any]:
@@ -63,7 +64,7 @@ def feature_to_item(
     if not geom:
         geom = {"type": "Point", "coordinates": []}
     geom_type = geom.get("type", "Unknown")
-    transformed_geom = transform_geometry(geom, crs)
+    transformed_geom = transform_geometry(geom, transformer)
     bbox = calculate_bbox(transformed_geom["coordinates"])
 
     item_props = {

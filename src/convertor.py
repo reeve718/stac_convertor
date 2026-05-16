@@ -21,7 +21,7 @@ def convert_file(
     items = []
 
     for idx, (feature, crs, transformer) in enumerate(stream_geojson(input_path)):
-        item = feature_to_item(feature, crs, seen_ids, idx)
+        item = feature_to_item(feature, transformer, seen_ids, idx)
         items.append(item)
         collection_state = update_collection(collection_state, item)
 

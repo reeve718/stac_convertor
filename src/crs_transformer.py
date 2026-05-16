@@ -10,21 +10,20 @@ def transform_point(x: float, y: float, from_crs: str) -> tuple[float, float]:
     return float(lon), float(lat)
 
 
-def transform_geometry(geometry: dict[str, Any], from_crs: str) -> dict[str, Any]:
+def transform_geometry(geometry: dict[str, Any], transformer: Transformer) -> dict[str, Any]:
     """Transform all coordinates in a GeoJSON geometry to WGS84."""
     geom_type = geometry["type"]
     coords = geometry["coordinates"]
 
     if geom_type == "Point":
-        x, y = coords[0], coords[1]
-        lon, lat = transform_point(x, y, from_crs)
-        return {"type": "Point", "coordinates": [lon, lat]}
+        lon, lat = transformer.transform(coords[0], coords[1])
+        return {"type": "Point", "coordinates": [float(lon), float(lat)]}
 
     elif geom_type == "LineString":
         return {
             "type": "LineString",
             "coordinates": [
-                list(transform_point(x, y, from_crs)) for x, y in coords
+                [float(lon), float(lat)] for lon, lat in (transformer.transform(x, y) for x, y in coords)
             ],
         }
 
@@ -33,8 +32,7 @@ def transform_geometry(geometry: dict[str, Any], from_crs: str) -> dict[str, Any
             "type": "Polygon",
             "coordinates": [
                 [
-                    list(transform_point(x, y, from_crs))
-                    for x, y in ring
+                    [float(lon), float(lat)] for lon, lat in (transformer.transform(x, y) for x, y in ring)
                 ]
                 for ring in coords
             ],
@@ -44,7 +42,7 @@ def transform_geometry(geometry: dict[str, Any], from_crs: str) -> dict[str, Any
         return {
             "type": "MultiPoint",
             "coordinates": [
-                list(transform_point(x, y, from_crs)) for x, y in coords
+                [float(lon), float(lat)] for lon, lat in (transformer.transform(x, y) for x, y in coords)
             ],
         }
 
@@ -53,8 +51,7 @@ def transform_geometry(geometry: dict[str, Any], from_crs: str) -> dict[str, Any
             "type": "MultiLineString",
             "coordinates": [
                 [
-                    list(transform_point(x, y, from_crs))
-                    for x, y in line
+                    [float(lon), float(lat)] for lon, lat in (transformer.transform(x, y) for x, y in line)
                 ]
                 for line in coords
             ],
@@ -66,8 +63,7 @@ def transform_geometry(geometry: dict[str, Any], from_crs: str) -> dict[str, Any
             "coordinates": [
                 [
                     [
-                        list(transform_point(x, y, from_crs))
-                        for x, y in ring
+                        [float(lon), float(lat)] for lon, lat in (transformer.transform(x, y) for x, y in ring)
                     ]
                     for ring in poly
                 ]
