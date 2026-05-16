@@ -43,6 +43,7 @@ geojson2stac --input-dir INPUT_DIR [-o OUTPUT_DIR] [--output-format FORMAT] [-v]
 | --- | --- | --- |
 | `INPUT_FILE` | Path to GeoJSON file or glob pattern (e.g. `data/*.json`) | — |
 | `--input-dir` | Directory containing GeoJSON files (`.json` or `.geojson`) | — |
+| `--recursive` | Recursively scan subdirectories when used with `--input-dir` | `false` |
 | `-o`, `--output` | Output directory | `stac/` |
 | `--output-format` | Output format: `stac` (default) or `bulk` | `stac` |
 | `-v`, `--verbose` | Enable verbose output | `false` |
@@ -50,6 +51,12 @@ geojson2stac --input-dir INPUT_DIR [-o OUTPUT_DIR] [--output-format FORMAT] [-v]
 **Examples:**
 
 ```bash
+# Recursive directory conversion (preserves folder structure)
+geojson2stac --input-dir data/ --recursive
+
+# Output structure mirrors input:
+# data/sub/file.json → stac/sub/file/
+
 # Convert all files in a directory
 geojson2stac --input-dir data/
 

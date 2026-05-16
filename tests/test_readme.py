@@ -57,6 +57,11 @@ def test_readme_documents_input_dir_option():
     assert "--input-dir" in content
 
 
+def test_readme_documents_recursive_option():
+    content = read_readme()
+    assert "--recursive" in content
+
+
 def test_readme_documents_glob_pattern():
     content = read_readme()
     assert "*.json" in content or "glob" in content.lower()
