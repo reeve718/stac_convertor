@@ -3,13 +3,6 @@ from pyproj import Transformer
 from typing import Any
 
 
-def transform_point(x: float, y: float, from_crs: str) -> tuple[float, float]:
-    """Transform a single point from source CRS to WGS84."""
-    transformer = Transformer.from_crs(from_crs, "EPSG:4326", always_xy=True)
-    lon, lat = transformer.transform(x, y)
-    return float(lon), float(lat)
-
-
 def transform_geometry(geometry: dict[str, Any], transformer: Transformer) -> dict[str, Any]:
     """Transform all coordinates in a GeoJSON geometry to WGS84."""
     geom_type = geometry["type"]

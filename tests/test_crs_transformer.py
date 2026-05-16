@@ -1,58 +1,49 @@
 import pytest
+from pyproj import Transformer
 from src.crs_transformer import (
-    transform_point,
     transform_geometry,
     calculate_bbox,
 )
 
 
-class TestTransformPoint:
-    def test_transform_epsg2326_point(self):
-        # EPSG:2326: [848550, 817395] → WGS84: approximately [114.26, 22.31]
-        lon, lat = transform_point(848550, 817395, "EPSG:2326")
-        assert 114.2 < lon < 114.4
-        assert 22.2 < lat < 22.4
-
-    def test_transform_wgs84_to_wgs84(self):
-        lon, lat = transform_point(114.26, 22.31, "EPSG:4326")
-        assert lon == pytest.approx(114.26, abs=0.001)
-        assert lat == pytest.approx(22.31, abs=0.001)
-
-
 class TestTransformGeometry:
-    def test_transform_point_geometry(self):
+    @pytest.fixture
+    def transformer_2326(self):
+        return Transformer.from_crs("EPSG:2326", "EPSG:4326", always_xy=True)
+
+    def test_transform_point_geometry(self, transformer_2326):
         geom = {"type": "Point", "coordinates": [848550, 817395]}
-        result = transform_geometry(geom, "EPSG:2326")
+        result = transform_geometry(geom, transformer_2326)
         assert result["type"] == "Point"
         assert len(result["coordinates"]) == 2
         assert 114.2 < result["coordinates"][0] < 114.4
 
-    def test_transform_linestring_geometry(self):
+    def test_transform_linestring_geometry(self, transformer_2326):
         geom = {
             "type": "LineString",
             "coordinates": [[848550, 817395], [848560, 817400]],
         }
-        result = transform_geometry(geom, "EPSG:2326")
+        result = transform_geometry(geom, transformer_2326)
         assert result["type"] == "LineString"
         assert len(result["coordinates"]) == 2
         assert 114.2 < result["coordinates"][0][0] < 114.4
 
-    def test_transform_polygon_geometry(self):
+    def test_transform_polygon_geometry(self, transformer_2326):
         geom = {
             "type": "Polygon",
             "coordinates": [[[848550, 817395], [848560, 817400], [848550, 817395]]],
         }
-        result = transform_geometry(geom, "EPSG:2326")
+        result = transform_geometry(geom, transformer_2326)
         assert result["type"] == "Polygon"
         assert len(result["coordinates"]) == 1
         assert len(result["coordinates"][0]) == 3
 
-    def test_transform_multipoint_geometry(self):
+    def test_transform_multipoint_geometry(self, transformer_2326):
         geom = {
             "type": "MultiPoint",
             "coordinates": [[848550, 817395], [848560, 817400]],
         }
-        result = transform_geometry(geom, "EPSG:2326")
+        result = transform_geometry(geom, transformer_2326)
         assert result["type"] == "MultiPoint"
         assert len(result["coordinates"]) == 2
 

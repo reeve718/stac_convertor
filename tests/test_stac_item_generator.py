@@ -1,4 +1,5 @@
 import pytest
+from pyproj import Transformer
 from src.stac_item_generator import (
     generate_item_id,
     handle_duplicate_ids,
@@ -55,25 +56,33 @@ class TestHandleDuplicateIDs:
 
 
 class TestFeatureToItem:
-    def test_inline_duplicate_tracking(self):
+    @pytest.fixture
+    def transformer_4326(self):
+        return Transformer.from_crs("EPSG:4326", "EPSG:4326", always_xy=True)
+
+    @pytest.fixture
+    def transformer_2326(self):
+        return Transformer.from_crs("EPSG:2326", "EPSG:4326", always_xy=True)
+
+    def test_inline_duplicate_tracking(self, transformer_4326):
         seen_ids = {}
         feature1 = {"properties": {"NAME_EN": "Park A"}, "geometry": {"type": "Point", "coordinates": [114.0, 22.0]}}
         feature2 = {"properties": {"NAME_EN": "Park A"}, "geometry": {"type": "Point", "coordinates": [114.1, 22.1]}}  # duplicate
 
-        item1 = feature_to_item(feature1, "EPSG:4326", seen_ids)
-        item2 = feature_to_item(feature2, "EPSG:4326", seen_ids)
+        item1 = feature_to_item(feature1, transformer_4326, seen_ids)
+        item2 = feature_to_item(feature2, transformer_4326, seen_ids)
 
         assert item1["id"] == "park-a"
         assert item2["id"] == "park-a-1"
         assert seen_ids == {"park-a": 1, "park-a-1": 0}
 
-    def test_point_feature_to_item(self):
+    def test_point_feature_to_item(self, transformer_2326):
         feature = {
             "type": "Feature",
             "geometry": {"type": "Point", "coordinates": [848550, 817395]},
             "properties": {"OBJECTID": 1, "NAME_EN": "Clear Water Bay Country Park", "NAME_TC": "清水灣郊野公園"},
         }
-        item = feature_to_item(feature, "EPSG:2326")
+        item = feature_to_item(feature, transformer_2326)
         assert item["id"] == "clear-water-bay-country-park"
         assert item["type"] == "Feature"
         assert item["properties"]["geometry_type"] == "Point"
