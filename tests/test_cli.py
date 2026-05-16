@@ -191,3 +191,7 @@ def test_batch_recursive_preserves_folder_structure(tmp_path):
         assert result.exit_code == 0
         assert (stac_dir / "root").exists()
         assert (stac_dir / "sub" / "nested").exists()
+        assert (stac_dir / "root" / "collection.json").exists()
+        assert (stac_dir / "root" / "items.json").exists()
+        assert (stac_dir / "sub" / "nested" / "collection.json").exists()
+        assert (stac_dir / "sub" / "nested" / "items.json").exists()
