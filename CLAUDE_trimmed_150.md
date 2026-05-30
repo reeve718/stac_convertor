@@ -105,7 +105,3 @@ Suggested references:
 - `.claude/workflows/openspec-superpowers.md`
 - `.claude/workflows/review-checklist.md`
 - `.claude/workflows/branch-finish.md`
-
-## Documentation Enforcement
-
-Any change that touches src/cli.py or adds/modifies CLI arguments MUST include an update to README.md. This is enforced via the OpenSpec per-artifact rule for tasks. The README is the source of truth for user-facing CLI documentation.

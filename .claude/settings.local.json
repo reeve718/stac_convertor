@@ -227,7 +227,19 @@
       "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor/.worktrees/add-recursive-input-dir\" diff e316936..039d2fd --stat)",
       "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor/.worktrees/add-recursive-input-dir\" diff e316936..039d2fd)",
       "Bash(pytest tests/test_readme.py::test_readme_documents_recursive_option -v)",
-      "Bash(pytest tests/test_cli.py::test_batch_recursive_preserves_folder_structure -v)"
+      "Bash(pytest tests/test_cli.py::test_batch_recursive_preserves_folder_structure -v)",
+      "Bash(pytest tests/test_geojson_parser.py -v --tb=short)",
+      "Bash(pytest tests/test_geojson_parser.py::test_detect_crs_quick_finds_epsg tests/test_geojson_parser.py::test_detect_crs_quick_defaults_to_wgs84 tests/test_geojson_parser.py::test_detect_crs_quick_partial_json_at_boundary tests/test_geojson_parser.py::test_detect_crs_quick_non_epsg_crs tests/test_geojson_parser.py::test_detect_crs_quick_crs_type_not_name -v)",
+      "Bash(git -C \"C:/Users/Reeve/Documents/Github/stac_convertor/.worktrees/optimize-geojson-streaming\" show 8043884 --stat)",
+      "Bash(python -m pytest tests/test_geojson_parser.py -v -k detect_crs_quick)",
+      "Bash(pytest tests/test_geojson_parser.py::test_stream_geojson_returns_crs_and_features tests/test_geojson_parser.py::test_stream_geojson_single_pass -v)",
+      "Bash(python -m pytest tests/test_geojson_parser.py -v)",
+      "Bash(python -m pytest --tb=short)",
+      "Bash(python -c \"from src.geojson_parser import detect_crs_quick; from pathlib import Path; import tempfile, os; f=tempfile.NamedTemporaryFile\\(mode='w',suffix='.json',delete=False\\); f.write\\('{\\\\\"type\\\\\":\\\\\"FeatureCollection\\\\\",\\\\\"crs\\\\\":{\\\\\"type\\\\\":\\\\\"name\\\\\",\\\\\"properties\\\\\":{\\\\\"name\\\\\":\\\\\"EPSG:2326\\\\\"}},\\\\\"features\\\\\":[]}'\\); f.close\\(\\); print\\('Test1:', detect_crs_quick\\(Path\\(f.name\\)\\)\\); os.unlink\\(f.name\\)\")",
+      "Bash(python -m pytest tests/test_cli.py::test_batch_convert_with_workers_sequential tests/test_cli.py::test_batch_convert_with_workers_parallel tests/test_cli.py::test_batch_convert_error_handling_parallel -v)",
+      "Bash(python -c \"from concurrent.futures import ThreadPoolExecutor; executor = ThreadPoolExecutor\\(max_workers=0\\); print\\('Created'\\)\")",
+      "Bash(python -c \"from concurrent.futures import ThreadPoolExecutor; executor = ThreadPoolExecutor\\(max_workers=-1\\); print\\('Created'\\)\")",
+      "Bash(python -m pytest tests/test_cli.py::test_batch_convert_with_workers_parallel -v --tb=short)"
     ]
   }
 }
