@@ -61,6 +61,11 @@ def main(
         print("Error: Must provide INPUT_FILE or --input-dir", file=sys.stderr)
         raise typer.Exit(1)
 
+    # Validate workers
+    if workers < 1:
+        print("Error: --workers must be at least 1", file=sys.stderr)
+        raise typer.Exit(1)
+
     # Process files
     from concurrent.futures import ThreadPoolExecutor, as_completed
 

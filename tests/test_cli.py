@@ -162,6 +162,91 @@ def test_relative_path_computation(tmp_path):
     assert str(relative_to_input) == "sub"
 
 
+def test_batch_convert_with_workers_sequential(tmp_path):
+    """--workers 1 should behave identically to sequential processing."""
+    from typer.testing import CliRunner
+    from cli import app
+
+    runner = CliRunner()
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    stac_dir = tmp_path / "stac"
+
+    sample = Path("test-data/CTRY_PARK.json")
+    if sample.exists():
+        (data_dir / "file1.json").write_bytes(sample.read_bytes())
+        (data_dir / "file2.json").write_bytes(sample.read_bytes())
+
+        # Run with --workers 1
+        result = runner.invoke(app, [
+            "--input-dir", str(data_dir),
+            "-o", str(stac_dir),
+            "--workers", "1"
+        ])
+
+        assert result.exit_code == 0
+        assert (stac_dir / "file1").exists()
+        assert (stac_dir / "file2").exists()
+
+
+def test_batch_convert_with_workers_parallel(tmp_path):
+    """--workers 2 should process files in parallel."""
+    from typer.testing import CliRunner
+    from cli import app
+
+    runner = CliRunner()
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    stac_dir = tmp_path / "stac"
+
+    sample = Path("test-data/CTRY_PARK.json")
+    if sample.exists():
+        (data_dir / "file1.json").write_bytes(sample.read_bytes())
+        (data_dir / "file2.json").write_bytes(sample.read_bytes())
+
+        result = runner.invoke(app, [
+            "--input-dir", str(data_dir),
+            "-o", str(stac_dir),
+            "--workers", "2"
+        ])
+
+        assert result.exit_code == 0
+        assert (stac_dir / "file1").exists()
+        assert (stac_dir / "file2").exists()
+        assert (stac_dir / "file1" / "collection.json").exists()
+        assert (stac_dir / "file2" / "collection.json").exists()
+
+
+def test_batch_convert_error_handling_parallel(tmp_path):
+    """Errors in parallel workers should be collected and reported."""
+    from typer.testing import CliRunner
+    from cli import app
+
+    runner = CliRunner()
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    stac_dir = tmp_path / "stac"
+
+    # One valid file, one corrupt
+    sample = Path("test-data/CTRY_PARK.json")
+    if sample.exists():
+        (data_dir / "valid.json").write_bytes(sample.read_bytes())
+        (data_dir / "invalid.json").write_text("not json")
+
+        result = runner.invoke(app, [
+            "--input-dir", str(data_dir),
+            "-o", str(stac_dir),
+            "--workers", "2"
+        ])
+
+        # Should fail with error summary
+        assert result.exit_code != 0
+        assert "1 succeeded, 1 failed" in result.output
+
+
 def test_batch_recursive_preserves_folder_structure(tmp_path):
     """Verify recursive batch convert preserves folder structure."""
     from typer.testing import CliRunner
