@@ -62,28 +62,51 @@ def main(
         raise typer.Exit(1)
 
     # Process files
-    succeeded = 0
-    failed = 0
-    errors = []
+    from concurrent.futures import ThreadPoolExecutor, as_completed
 
-    for file_path in files:
+    def convert_one(file_path: Path, input_dir: Path | None, output_dir: Path,
+                   output_format: str, recursive: bool, verbose: bool) -> tuple[Path, bool, str | None]:
+        """Convert a single file. Returns (path, success, error_message)."""
         try:
             if verbose:
                 print(f"Converting: {file_path}")
 
-            # Compute relative output path if recursive
             if input_dir is not None and recursive:
                 relative_subpath = file_path.parent.relative_to(input_dir)
-                # Pass to convert_file to mirror input folder structure in output
                 convert_file(file_path, output_dir, output_format=output_format, output_subdir=relative_subpath)
             else:
                 convert_file(file_path, output_dir, output_format=output_format)
-            succeeded += 1
+            return (file_path, True, None)
         except Exception as e:
-            failed += 1
-            errors.append((file_path, str(e)))
-            if verbose:
-                print(f"Error converting {file_path}: {e}", file=sys.stderr)
+            return (file_path, False, str(e))
+
+    succeeded = 0
+    failed = 0
+    errors = []
+
+    if workers == 1:
+        # Sequential processing (original behavior)
+        for file_path in files:
+            path, ok, err = convert_one(file_path, input_dir, output_dir, output_format, recursive, verbose)
+            if ok:
+                succeeded += 1
+            else:
+                failed += 1
+                errors.append((path, err))
+    else:
+        # Parallel processing
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(convert_one, fp, input_dir, output_dir, output_format, recursive, verbose): fp
+                for fp in files
+            }
+            for future in as_completed(futures):
+                path, ok, err = future.result()
+                if ok:
+                    succeeded += 1
+                else:
+                    failed += 1
+                    errors.append((path, err))
 
     # Summary output
     if mode in ("directory", "glob"):
