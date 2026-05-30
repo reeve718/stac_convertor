@@ -109,27 +109,23 @@ def stream_features(path: Path) -> Any:
 def stream_geojson(path: Path) -> Any:
     """Stream features, CRS, and Transformer from a GeoJSON file.
 
+    Uses detect_crs_quick() to extract CRS from a bounded file prefix,
+    then streams features. This eliminates the redundant full-file read
+    that occurred when CRS was detected via ijson scanning.
+
     Yields:
         Tuple of (feature, crs, transformer) where crs is the EPSG string
         and transformer is a reusable pyproj.Transformer instance.
     """
     from pyproj import Transformer
 
-    crs = "EPSG:4326"
-    transformer = None
-
-    with open(path, "rb") as f:
-        # First pass: extract crs from the root object and create Transformer
-        for prefix, event, value in ijson.parse(f):
-            if prefix == "crs.properties.name" and event == "string":
-                if value.startswith("EPSG:"):
-                    crs = value
-                    break
+    # Detect CRS from bounded prefix (single file open)
+    crs = detect_crs_quick(path)
 
     # Create Transformer once with the detected CRS
     transformer = Transformer.from_crs(crs, "EPSG:4326", always_xy=True)
 
-    # Reset file and stream features
+    # Stream features from same file
     with open(path, "rb") as f:
         parser = ijson.items(f, "features.item")
         for feature in parser:
