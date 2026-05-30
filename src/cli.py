@@ -23,6 +23,12 @@ def main(
     )] = None,
     output_format: str = typer.Option("stac", "--output-format", help="Output format: stac or bulk"),
     recursive: bool = typer.Option(False, "--recursive", help="Recursively scan subdirectories when used with --input-dir"),
+    workers: int = typer.Option(
+        1,
+        "--workers",
+        "-w",
+        help="Number of parallel workers for batch conversion (default: 1, sequential)"
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Enable verbose output"),
 ) -> None:
     """Convert GeoJSON files to STAC format."""
