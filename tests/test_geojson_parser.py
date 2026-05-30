@@ -8,6 +8,7 @@ from src.geojson_parser import (
     detect_crs,
     stream_features,
     stream_geojson,
+    detect_crs_quick,
 )
 
 
@@ -154,3 +155,60 @@ def test_transformer_is_reused(tmp_path):
         transformers.append(transformer)
     # All transformers should be the same instance
     assert len(set(id(t) for t in transformers)) == 1, "Transformer should be reused"
+
+
+def test_detect_crs_quick_finds_epsg(tmp_path):
+    """detect_crs_quick should extract EPSG code from GeoJSON file."""
+    from src.geojson_parser import detect_crs_quick
+
+    # Create temp file with CRS
+    tmp_file = tmp_path / "test.json"
+    tmp_file.write_text('{"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"EPSG:2326"}},"features":[]}')
+
+    crs = detect_crs_quick(tmp_file)
+    assert crs == "EPSG:2326"
+
+
+def test_detect_crs_quick_defaults_to_wgs84(tmp_path):
+    """detect_crs_quick should return WGS84 when CRS not found."""
+    from src.geojson_parser import detect_crs_quick
+
+    tmp_file = tmp_path / "test.json"
+    tmp_file.write_text('{"type":"FeatureCollection","features":[]}')
+
+    crs = detect_crs_quick(tmp_file)
+    assert crs == "EPSG:4326"
+
+
+def test_detect_crs_quick_partial_json_at_boundary(tmp_path):
+    """detect_crs_quick should handle partial JSON at 4KB boundary."""
+    from src.geojson_parser import detect_crs_quick
+
+    # Create JSON that would be partial at 4KB boundary
+    tmp_file = tmp_path / "test.json"
+    tmp_file.write_text('{"type":"FeatureCollection","crs":{"type":"name","properties":{' + '"x"' + ':' + '"' + 'A'*5000 + '}},"features":[]}')
+
+    crs = detect_crs_quick(tmp_file)
+    assert crs == "EPSG:4326"  # Should fall back
+
+
+def test_detect_crs_quick_non_epsg_crs(tmp_path):
+    """detect_crs_quick should fall back to WGS84 for non-EPSG CRS."""
+    from src.geojson_parser import detect_crs_quick
+
+    tmp_file = tmp_path / "test.json"
+    tmp_file.write_text('{"type":"FeatureCollection","crs":{"type":"name","properties":{"name":"ESRI:102100"}},"features":[]}')
+
+    crs = detect_crs_quick(tmp_file)
+    assert crs == "EPSG:4326"
+
+
+def test_detect_crs_quick_crs_type_not_name(tmp_path):
+    """detect_crs_quick should fall back to WGS84 when CRS type is not 'name'."""
+    from src.geojson_parser import detect_crs_quick
+
+    tmp_file = tmp_path / "test.json"
+    tmp_file.write_text('{"type":"FeatureCollection","crs":{"type":"EPSG","properties":{"name":"EPSG:4326"}},"features":[]}')
+
+    crs = detect_crs_quick(tmp_file)
+    assert crs == "EPSG:4326"

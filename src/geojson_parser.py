@@ -54,6 +54,40 @@ def detect_crs(fc: dict[str, Any]) -> str:
     return "EPSG:4326"
 
 
+def detect_crs_quick(path: Path) -> str:
+    """Detect CRS from a GeoJSON file by reading only the first 4KB.
+
+    This is an optimization to avoid reading the entire file twice.
+    CRS in GeoJSON FeatureCollections is always at the root level,
+    which is always within the first few KB of a valid file.
+
+    Args:
+        path: Path to the GeoJSON file
+
+    Returns:
+        EPSG CRS string (e.g., "EPSG:4326"), or "EPSG:4326" as default
+    """
+    try:
+        with open(path, "rb") as f:
+            prefix = f.read(4096)
+
+        obj = json.loads(prefix)
+
+        # Check if CRS exists and has expected structure
+        crs = obj.get("crs", {})
+        if crs.get("type") == "name":
+            name = crs.get("properties", {}).get("name", "")
+            if name.startswith("EPSG:"):
+                return name
+
+    except (json.JSONDecodeError, OSError):
+        # Partial JSON at boundary, malformed, or file read error — fall through
+        pass
+
+    # Default to WGS84
+    return "EPSG:4326"
+
+
 def validate_geometry_type(geom_type: str) -> None:
     if geom_type not in SUPPORTED_GEOMETRY_TYPES:
         print(f"Error: Unsupported geometry type: {geom_type}", file=sys.stderr)
